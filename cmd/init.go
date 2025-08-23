@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -12,21 +9,23 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-// initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "A brief description of your command",
 	Long:  `fiks senere`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		path := os.Getenv("HT_DB")
+
 		if path == "" {
 			return fmt.Errorf("invalid path to db")
 		}
 
 		db, err := sql.Open("sqlite", path)
+
 		if err != nil {
 			return err
 		}
+
 		defer db.Close()
 
 		if _, err := db.Exec(`PRAGMA journal_mode=WAL;`); err != nil {
@@ -34,16 +33,15 @@ var initCmd = &cobra.Command{
 		}
 
 		if _, err := db.Exec(`CREATE TABLE IF NOT EXISTS commands (
-		id INTEGER PRIMARY KEY,
-		ts INTEGER NOT NULL,
-		shell TEXT NOT NULL,
-		dir TEXT NOT NULL,
-		repo TEXT,
-		branch TEXT,
-		cmd TEXT NOT NULL,
-		exit_code INTEGER NOT NULL,
-		duration_ms INTEGER NOT NULL
-		);`); err != nil {
+								id INTEGER PRIMARY KEY,
+								ts INTEGER NOT NULL,
+								shell TEXT ,
+								dir TEXT ,
+								repo TEXT,
+								branch TEXT,
+								cmd TEXT ,
+								exit_code INTEGER ,
+								duration_ms INTEGER );`); err != nil {
 			return err
 		}
 
