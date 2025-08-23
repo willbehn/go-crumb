@@ -37,7 +37,8 @@ var recentCmd = &cobra.Command{
 		rows, err := tx.Query(`
 			SELECT cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
 			FROM commands
-			ORDER BY ts`)
+			ORDER BY ts DESC
+			LIMIT 10`)
 
 		if err != nil {
 			tx.Rollback()
