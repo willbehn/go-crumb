@@ -1,0 +1,54 @@
+package cmd
+
+import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"os"
+	"willbehn/ht/models"
+
+	"github.com/spf13/cobra"
+	_ "modernc.org/sqlite"
+)
+
+func init() { rootCmd.AddCommand(recordCmd) }
+
+var recordCmd = &cobra.Command{
+	Use:   "record",
+	Short: "fiks senere",
+	RunE: func(cmd *cobra.Command, args []string) error {
+
+		ev := models.CmdEvent
+
+		if err := json.NewDecoder(os.Stdin).Decode(&ev); err != nil {
+			return err
+		}
+
+		path := os.Getenv("HT_DB")
+		if path == "" {
+			return fmt.Errorf("invalid path to db")
+		}
+
+		db, err := sql.Open("sqlite", path)
+		if err != nil {
+			return err
+		}
+		defer db.Close()
+
+		tx, err := db.BeginTx(cmd.Context(), nil)
+		if err != nil {
+			return err
+		}
+		_, err = tx.ExecContext(context.Background(),
+			`INSERT INTO commands (ts,shell,dir,repo,branch,cmd,exit_code,duration_ms)
+			 VALUES (?,?,?,?,?,?,?,?)`,
+			ev.TS, ev.Shell, ev.Dir, ev.Repo, ev.Branch, ev.Cmd, ev.Exit, ev.Dur)
+
+		if err != nil {
+			_ = tx.Rollback()
+			return err
+		}
+		return tx.Commit()
+	},
+}
