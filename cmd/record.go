@@ -24,7 +24,7 @@ var recordCmd = &cobra.Command{
 			return err
 		}
 
-		path := os.Getenv("HT_DB")
+		path := os.Getenv("CA_DB")
 		if path == "" {
 			return fmt.Errorf("invalid path to db")
 		}

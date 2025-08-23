@@ -14,7 +14,7 @@ var initCmd = &cobra.Command{
 	Short: "A brief description of your command",
 	Long:  `fiks senere`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		path := os.Getenv("HT_DB")
+		path := os.Getenv("CA_DB")
 
 		if path == "" {
 			return fmt.Errorf("invalid path to db")
