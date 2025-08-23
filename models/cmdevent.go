@@ -1,6 +1,7 @@
 package models
 
-var CmdEvent struct {
+type CmdEvent struct {
+	Id     int     `json:"id"`
 	Cmd    string  `json:"cmd"`
 	Shell  string  `json:"shell"`
 	Dir    string  `json:"dir"`

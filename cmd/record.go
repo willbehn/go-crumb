@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -19,7 +18,7 @@ var recordCmd = &cobra.Command{
 	Short: "fiks senere",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		ev := models.CmdEvent
+		var ev models.CmdEvent
 
 		if err := json.NewDecoder(os.Stdin).Decode(&ev); err != nil {
 			return err
@@ -31,16 +30,18 @@ var recordCmd = &cobra.Command{
 		}
 
 		db, err := sql.Open("sqlite", path)
+
 		if err != nil {
 			return err
 		}
+
 		defer db.Close()
 
 		tx, err := db.BeginTx(cmd.Context(), nil)
 		if err != nil {
 			return err
 		}
-		_, err = tx.ExecContext(context.Background(),
+		_, err = tx.ExecContext(cmd.Context(),
 			`INSERT INTO commands (ts,shell,dir,repo,branch,cmd,exit_code,duration_ms)
 			 VALUES (?,?,?,?,?,?,?,?)`,
 			ev.TS, ev.Shell, ev.Dir, ev.Repo, ev.Branch, ev.Cmd, ev.Exit, ev.Dur)
@@ -49,6 +50,7 @@ var recordCmd = &cobra.Command{
 			_ = tx.Rollback()
 			return err
 		}
+
 		return tx.Commit()
 	},
 }
