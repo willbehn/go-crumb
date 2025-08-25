@@ -33,7 +33,7 @@ var recentCmd = &cobra.Command{
 			SELECT cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
 			FROM commands
 			ORDER BY ts DESC
-			LIMIT 10`)
+			LIMIT 20`)
 
 		if err != nil {
 			tx.Rollback()
@@ -67,8 +67,9 @@ var recentCmd = &cobra.Command{
 		for _, ev := range results {
 
 			ts := int64(ev.TS)
-			t := time.Unix(ts, 0)
-			fmt.Println(t, ev.Cmd)
+			t := time.Unix(ts, 0).Local()
+			//fmt.Printf("(%s) %s\n", t.Format("2006-01-02 15:04:05"), ev.Cmd)
+			fmt.Printf("\033[32m (%s) \033[0m %s\n", t.Format("2006-01-02 15:04:05"), ev.Cmd)
 		}
 
 		return nil
