@@ -29,12 +29,12 @@ var searchCmd = &cobra.Command{
 		FROM commands `
 
 		for _, arg := range args {
-			conditions = append(conditions, "cmd LIKE ?")
+			conditions = append(conditions, " cmd LIKE ?")
 			parameters = append(parameters, "%"+arg+"%")
 		}
 
 		if len(conditions) > 0 {
-			query += "WHERE " + strings.Join(conditions, "AND")
+			query += "WHERE" + strings.Join(conditions, "AND")
 		}
 
 		rows, err := db.Query(query, parameters...)
