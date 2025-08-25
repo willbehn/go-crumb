@@ -1,8 +1,3 @@
-export CA_BIN="/Users/williambehn/code/projects/cmd-alytics/bin/ca"
-export CA_DB="/Users/williambehn/code/projects/cmd-alytics/database/history.db"
-
-alias ca="$CA_BIN"
-
 autoload -Uz add-zsh-hook
 
 #NB! Legg til ting du ikke vil skal bli logget her
@@ -46,7 +41,7 @@ _clis_preexec() {
   if command -v jq >/dev/null 2>&1; then
     { jq -n --arg cmd "$line" --arg dir "$dir" --argjson ts "$ts" \
          '{cmd:$cmd, dir:$dir, ts:$ts}' \
-      | "$CA_BIN" record; } >/dev/null 2>&1 &!
+      | "$CRUMB_BIN" record; } >/dev/null 2>&1 &!
   else
     # Hvis jq ikke er installert, idk 
     :
