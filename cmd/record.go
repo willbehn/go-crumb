@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"database/sql"
 	"encoding/json"
-	"fmt"
 	"os"
+	"willbehn/ht/internal"
 	"willbehn/ht/models"
 
 	"github.com/spf13/cobra"
@@ -24,12 +23,7 @@ var recordCmd = &cobra.Command{
 			return err
 		}
 
-		path := os.Getenv("CA_DB")
-		if path == "" {
-			return fmt.Errorf("invalid path to db")
-		}
-
-		db, err := sql.Open("sqlite", path)
+		db, err := internal.OpenDB()
 
 		if err != nil {
 			return err

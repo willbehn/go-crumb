@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"database/sql"
 	"fmt"
-	"os"
+	"willbehn/ht/internal"
 
 	"github.com/spf13/cobra"
 	_ "modernc.org/sqlite"
@@ -14,13 +13,8 @@ var initCmd = &cobra.Command{
 	Short: "A brief description of your command",
 	Long:  `fiks senere`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		path := os.Getenv("CA_DB")
 
-		if path == "" {
-			return fmt.Errorf("invalid path to db")
-		}
-
-		db, err := sql.Open("sqlite", path)
+		db, err := internal.OpenDB()
 
 		if err != nil {
 			return err
