@@ -66,10 +66,10 @@ var recentCmd = &cobra.Command{
 
 		for _, ev := range results {
 
-			ts := int64(ev.TS)
-			t := time.Unix(ts, 0).Local()
-			//fmt.Printf("(%s) %s\n", t.Format("2006-01-02 15:04:05"), ev.Cmd)
-			fmt.Printf("\033[32m (%s) \033[0m %s\n", t.Format("2006-01-02 15:04:05"), ev.Cmd)
+			t := time.Unix(ev.TS, 0).Local()
+			tRel := internal.TimeSince(t)
+
+			fmt.Printf("\033[32m (%s) \033[0m %s\n", tRel, ev.Cmd)
 		}
 
 		return nil
