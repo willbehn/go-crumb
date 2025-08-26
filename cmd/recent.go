@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"willbehn/ht/internal"
 	"willbehn/ht/models"
 
@@ -31,7 +32,7 @@ var recentCmd = &cobra.Command{
 			SELECT id, cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
 			FROM commands
 			ORDER BY ts DESC
-			LIMIT 20`)
+			LIMIT 10`)
 
 		if err != nil {
 			tx.Rollback()
@@ -63,7 +64,15 @@ var recentCmd = &cobra.Command{
 			return err
 		}
 
-		internal.ResultOutputShort(results)
+		isLong, _ := cmd.Flags().GetBool("long")
+		fmt.Println("10 most recent commands")
+
+		if isLong {
+			internal.ResultOutputLong(results)
+
+		} else {
+			internal.ResultOutputShort(results)
+		}
 
 		return nil
 	},

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strings"
 	"willbehn/ht/internal"
 	"willbehn/ht/models"
@@ -35,6 +36,8 @@ var searchCmd = &cobra.Command{
 			query += "WHERE" + strings.Join(conditions, "AND")
 		}
 
+		query += "ORDER BY ts DESC"
+
 		rows, err := db.Query(query, parameters...)
 
 		if err != nil {
@@ -62,7 +65,17 @@ var searchCmd = &cobra.Command{
 			results = append(results, ev)
 		}
 
-		internal.ResultOutputLong(results)
+		resultCount := len(results)
+		fmt.Printf("%d results found - newest first\n", resultCount)
+
+		isLong, _ := cmd.Flags().GetBool("long")
+
+		if isLong {
+			internal.ResultOutputLong(results)
+
+		} else {
+			internal.ResultOutputShort(results)
+		}
 
 		return nil
 	},
