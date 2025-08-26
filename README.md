@@ -9,7 +9,7 @@ The CLI is created using golang with cobra, which is a first, so feel free to fo
 
 ## Demo
 
-![Made with VHS](https://vhs.charm.sh/vhs-11g1AC5aigYwnDX7hn4Kp4.gif)
+![Made with VHS](https://vhs.charm.sh/vhs-5uHwmJTSilN6JYZbsxwpGQ.gif)
 
 ## Prerequisites
 - Go installed
