@@ -22,7 +22,7 @@ _clis_preexec() {
   local first=$words[1]
 
   # skipper egne kommandoer
-  [[ $first == $CA_BIN || $first == "ca" ]] && return
+  [[ $first == $CRUMB_BIN || $first == "cb" ]] && return
 
   # skipper sudo kommandoer
   [[ $first == sudo ]] && return
@@ -38,14 +38,13 @@ _clis_preexec() {
   local shell="zsh"
 
   # json laget med jq pipes til record cmd. Non blocking (&) og gir ingen return verdi (!)
-  if command -v jq >/dev/null 2>&1; then
-    { jq -n --arg cmd "$line" --arg dir "$dir" --argjson ts "$ts" \
-         '{cmd:$cmd, dir:$dir, ts:$ts}' \
-      | "$CRUMB_BIN" record; } >/dev/null 2>&1 &!
-  else
-    # Hvis jq ikke er installert, idk 
-    :
-  fi
+ 
+  "$CRUMB_BIN" record \
+  --cmd "$line" \
+  --dir "$PWD" \
+  --ts "$EPOCHSECONDS" \
+  --exit "${status:-0}" >/dev/null 2>&1 &!
+
 }
 
 add-zsh-hook preexec _clis_preexec
