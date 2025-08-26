@@ -10,15 +10,13 @@ import (
 )
 
 func ResultOutputShort(results []models.CmdEvent) {
-
-	fmt.Printf("%-4s  %-8s  %-20s  %s\n", "ID", "SINCE", "DIR", "COMMAND")
-	fmt.Println(strings.Repeat("-", 72))
+	fmt.Println("\033[2m" + strings.Repeat("-", 72) + "\033[0m")
 
 	for _, ev := range results {
 		t := time.Unix(ev.TS, 0).Local()
 		since := TimeSince(t)
 
-		fmt.Printf("%-4d  %-8s  %-20s  %s\n",
+		fmt.Printf("\033[2m %-4d \033[0m \033[32m%-8s\033[0m  \033[2m%-20s\033[0m  \033[1m%s\033[0m\n",
 			ev.Id,
 			since,
 			prettyDir(ev.Dir),
@@ -28,14 +26,13 @@ func ResultOutputShort(results []models.CmdEvent) {
 }
 
 func ResultOutputLong(results []models.CmdEvent) {
-	fmt.Printf("%-4s  %-19s  %-7s  %-20s  %s\n", "ID", "TIME", "SHELL", "DIR", "COMMAND")
-	fmt.Println(strings.Repeat("-", 80))
+	fmt.Println("\033[2m" + strings.Repeat("-", 80) + "\033[0m")
 
 	for _, ev := range results {
 		t := time.Unix(ev.TS, 0).Local()
 		absT := t.Format("2006-01-02 15:04:05")
 
-		fmt.Printf("%-4d  %-19s  %-7s  %-20s  %s\n",
+		fmt.Printf("\033[2m %-4d \033[0m \033[32m%-19s\033[0m  \033[2m%-7s\033[0m  \033[2m%-20s\033[0m  \033[1m%s\033[0m\n",
 			ev.Id,
 			absT,
 			ev.Shell,
