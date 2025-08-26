@@ -23,7 +23,7 @@ var searchCmd = &cobra.Command{
 		var conditions []string
 		var parameters []any
 
-		query := `SELECT cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
+		query := `SELECT id, cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
 		FROM commands `
 
 		for _, arg := range args {
@@ -47,6 +47,7 @@ var searchCmd = &cobra.Command{
 			var ev models.CmdEvent
 
 			if err := rows.Scan(
+				&ev.Id,
 				&ev.Cmd,
 				&ev.Shell,
 				&ev.Dir,
@@ -61,7 +62,7 @@ var searchCmd = &cobra.Command{
 			results = append(results, ev)
 		}
 
-		internal.ResultOutputShort(results)
+		internal.ResultOutputLong(results)
 
 		return nil
 	},

@@ -28,7 +28,7 @@ var recentCmd = &cobra.Command{
 		}
 
 		rows, err := tx.Query(`
-			SELECT cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
+			SELECT id, cmd, shell, dir, repo, branch, ts, exit_code, duration_ms  
 			FROM commands
 			ORDER BY ts DESC
 			LIMIT 20`)
@@ -44,6 +44,7 @@ var recentCmd = &cobra.Command{
 			var ev models.CmdEvent
 
 			if err := rows.Scan(
+				&ev.Id,
 				&ev.Cmd,
 				&ev.Shell,
 				&ev.Dir,
