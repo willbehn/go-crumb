@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
-	"time"
 	"willbehn/ht/internal"
 	"willbehn/ht/models"
 
@@ -63,13 +61,7 @@ var searchCmd = &cobra.Command{
 			results = append(results, ev)
 		}
 
-		for _, ev := range results {
-
-			t := time.Unix(ev.TS, 0).Local()
-			tRel := internal.TimeSince(t)
-
-			fmt.Printf("(%s) %s\n", tRel, ev.Cmd)
-		}
+		internal.ResultOutputShort(results)
 
 		return nil
 	},

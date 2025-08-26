@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"time"
 	"willbehn/ht/internal"
 	"willbehn/ht/models"
 
@@ -64,13 +62,7 @@ var recentCmd = &cobra.Command{
 			return err
 		}
 
-		for _, ev := range results {
-
-			t := time.Unix(ev.TS, 0).Local()
-			tRel := internal.TimeSince(t)
-
-			fmt.Printf("\033[32m (%s) \033[0m %s\n", tRel, ev.Cmd)
-		}
+		internal.ResultOutputShort(results)
 
 		return nil
 	},
